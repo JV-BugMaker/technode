@@ -1,0 +1,24 @@
+{
+  "name": "technode",
+  "version": "1.0.0",
+  "description": "use node + anjularjs socket.io",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JV-BugMaker/technode.git"
+  },
+  "keywords": [
+    "socket.io",
+    "node",
+    "anjular"
+  ],
+  "author": "JV",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JV-BugMaker/technode/issues"
+  },
+  "homepage": "https://github.com/JV-BugMaker/technode#readme"
+}
