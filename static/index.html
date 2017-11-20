@@ -1,0 +1,40 @@
+<html ng-app="technodeApp">
+    <head>
+        <title>technode</title>
+        <link rel="stylesheet" href="/components/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" href="/style/room.css">
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+        <script type="text/javascript" src="/components/jquery/dist/jquery.js"></script>
+        <script type="text/javascript" src="/components/bootstrap/dist/js/bootstrap.js"></script>
+        <script type="text/javascript" src="/components/angular/angular.js"></script>
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a href="#" class="navbars-brand">technode</a>
+                </div>
+            </div>
+        </div>
+        <div class="container" style="margin-top:100px;">
+            <div class="col-md-12">
+                <div class="panel panel-default room" ng-controller="RoomCtrl">
+                    <div class="panel-heading room-header">technode</div>
+                    <div class="panel-body room-content">
+                        <div class="list-group messages" auto-scroll-to-bottom>
+                            <div class="list-group-item message" ng-repeat="message in messages">
+                                某某:{{message}}
+                            </div>
+                        </div>
+                        <form action="" class="message-creator" ng-controller="MessageCreatorCtrl">
+                            <div class="form-group">
+                                <textarea name="" id="" cols="30" rows="10" class="form-control message-input" placeholder="ctrl+enter to quick send" required ng-model="newMessage" ctrl-enter-break-line="createMessage()"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="/technode.js"></script>
+    </body>
+</html>
