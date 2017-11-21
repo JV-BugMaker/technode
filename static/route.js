@@ -1,4 +1,4 @@
-//将路由配置引入进来
+//将路由配置引入进来 此文件必须引入到index.html文件中
 angular.module('technodeApp').config(function($routeProvider,$locationProvider){
     //修正书中问题
     $locationProvider.html5Mode({
@@ -10,7 +10,7 @@ angular.module('technodeApp').config(function($routeProvider,$locationProvider){
         controller:'RoomCtrl',  //指定控制器 逻辑
     }).when('/login',{
         templateUrl:'/pages/login.html',
-        controller:'LoginCtrl',
+        controller:'LoginCtrl',  //逻辑尚未开始
     }).otherwise({
         redirectTo:'/login', 
     });
