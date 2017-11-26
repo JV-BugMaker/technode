@@ -91,3 +91,50 @@ app.get('/api/logout',function(req,res){
     req.session._userId = null;
     res.json(401);
 });
+
+// socket.io 验证
+var signedCookieParser = cookieParse('technode');
+var MongoStore = require('connect-mongo')('session');
+var sessionStore = new MongoStore({
+    url:'mongodb://localhost/technode',
+});
+
+app.use(express.bodyParse());
+app.use(express.cookieParse());
+app.use(session({
+    secret:'technode',
+    resave:true,
+    saveUnititialized:false,
+    cookie:{
+        maxAge:60 * 1000 * 60
+    },
+    store:sessionStore
+}));
+
+var server = app.listen(port,function(){
+    console.log('technode is on port '+ port + '!');
+});
+
+var io = require('socket.io').listen(server);
+
+//socket io 认证
+io.set('authorization',function(handshakeData,accept){
+    signedCookieParser(handshakeData,{},function(err){
+        if(err){
+            accept(err,false);
+        }else{
+            sessionStore.get(handshakeData.signedCookies['connect.sid'],function(err,session){
+                if(err){
+                    accept(err.message,false);
+                }else{
+                    handshakeData.session = session;
+                    if(session._userId){
+                        accept(null,true);
+                    }else{
+                        accept('No login');
+                    }
+                }
+            });
+        }
+    });
+});
