@@ -1,7 +1,7 @@
-<form action="" class="form-inline">
+<form action="" class="form-inline" ng-submit="login()">
     <div class="form-group">
         <label for="" class="sr-only">Gmail</label>
-        <input type="text" type="email" required class="form-control" placeholder="Mail Account">
+        <input type="text" type="email" required class="form-control" placeholder="Mail Account" ng-model="email">
     </div>
     <button type="submit" class="btn btn-primary btn-enter">Enter</button>
 </form>

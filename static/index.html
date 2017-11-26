@@ -15,6 +15,16 @@
                 <div class="navbar-header">
                     <a href="#" class="navbars-brand">technode</a>
                 </div>
+                <nav class="collapse navbar-collapse" role="navigation">
+                    <ul class="nav navbar-nav navbar-right" ng-show="me">
+                        <li>
+                            <img ng-src="{{me.avatarurl}}" title="{{me.name}}" class="img-rounded" alt="" />
+                        </li>
+                        <li>
+                            <a href="" ng-click="logout()">Log Out</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
         <div class="container" style="margin-top:100px;">

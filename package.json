@@ -22,7 +22,9 @@
   },
   "homepage": "https://github.com/JV-BugMaker/technode#readme",
   "dependencies": {
+    "async": "^2.6.0",
     "express": "^4.16.2",
+    "gravatar": "^1.6.0",
     "mongoose": "^4.13.5",
     "socket.io": "^2.0.4"
   }

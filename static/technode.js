@@ -15,4 +15,18 @@ angular.module('technodeApp',['ngRoute']).run(function($window,$rootScope,$http,
     }).error(function(datas){
         $location.path('/login');
     });
+
+    $rootScope.logout = function(){
+        $http({
+            url:'/api/logout',
+            method:'GET',
+        }).success(function(){
+            $rootScope.me = null;
+            $location.path('/login');
+        });
+    };
+    //调用链 触发on事件
+    $rootScope.$on('login',function(evt,me){
+        $rootScope.me = me;
+    });
 });
