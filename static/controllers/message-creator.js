@@ -4,7 +4,14 @@ angular.module('technodeApp').controller('MessageCreatorCtrl',function($scope,so
         if($scope.newMessage == ''){
             return
         }
-        socket.emit('createMessage',$scope.newMessage)
-        $scope.newMessage = ''
+        // socket.emit('createMessage',$scope.newMessage)
+        // $scope.newMessage = ''
+        socket.emit('message.create',function(){
+            message: $scope.newMessage,
+            creator: $scope.me
+        });
+        $scope.newMessage = '';
     }
 });
+
+

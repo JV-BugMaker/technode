@@ -4,12 +4,13 @@
         <div class="panel-body room-content">
             <div class="list-group messages" auto-scroll-to-bottom>
                 <div class="list-group-item message" ng-repeat="message in messages">
-                    某某:{{message}}
+                    <img ng-src="{{message.creator.avatarUrl}}" class="img-round" alt="" title="{{message.creator.name}}" />
+                    {{message.creator.name}}:{{message.message}}
                 </div>
             </div>
             <form action="" class="message-creator" ng-controller="MessageCreatorCtrl">
                 <div class="form-group">
-                    <textarea name="" id="" cols="30" rows="10" class="form-control message-input" placeholder="ctrl+enter to quick send" required ng-model="newMessage" ctrl-enter-break-line="createMessage()"></textarea>
+                    <textarea name="" id="" cols="30" rows="10" ng-model="newMessage" class="form-control message-input" placeholder="ctrl+enter to quick send" required ng-model="newMessage" ctrl-enter-break-line="createMessage()"></textarea>
                 </div>
             </form>
         </div>
