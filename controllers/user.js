@@ -28,3 +28,33 @@
         }
     });
  };
+
+//上线状态
+exports.online = function(_userId,callback){
+    db.User.findOneAndUpdate({
+        _id:_userId
+    },{
+        $set:{
+            online:true
+        }
+    },callback);
+};
+
+//下线操作
+exports.offline = function(_userId,callback){
+    db.User.findOneAndUpdate({
+        _id:_userId
+    },{
+        $set:{
+            online:false
+        }
+    },callback);
+};
+//获取在线用户列表
+exports.getOnlineUsers = function(callback){
+    db.User.find({
+        online:true
+    },callback);
+};
+
+

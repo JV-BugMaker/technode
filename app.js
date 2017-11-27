@@ -79,6 +79,16 @@ app.post('/api/login',function(req,res){
                 });
             }else{
                 req.session._userId = user._id;
+                //增加个人的是否在线的状态显示
+                Controllers.User.online(user._id,function(err,user){
+                    if(err){
+                        res.json(500,{
+                            msg:err,
+                        });
+                    }else{
+                        res.json(user);
+                    }
+                });
                 res.json(user);
             }
         });
@@ -88,8 +98,19 @@ app.post('/api/login',function(req,res){
 });
 
 app.get('/api/logout',function(req,res){
+    var _userId = req.session._userId;
     req.session._userId = null;
-    res.json(401);
+    Controllers.User.offline(_userId,function(err,user){
+        if(err){
+            res.json(500,{
+                msg:err
+            });
+        }else{
+            res.json(200);
+            //删除信息
+            delete req.session._userId;
+        }
+    });
 });
 
 // socket.io 验证
@@ -136,6 +157,49 @@ io.set('authorization',function(handshakeData,accept){
                 }
             });
         }
+    });
+});
+
+io.sockets.on('connection',function(socket){
+    var _userId = socket.handshakeData.session._userId;
+    Controllers.User.online(_userId,function(err,user){
+        if(err){
+            socket.emit('err',{
+                msg:err
+            });
+        }else{
+            socket.broadcast.emit('online',user);
+        }
+    });
+    socket.on('getRoom',function(){
+        Controllers.User.getOnlineUsers(function(err,users){
+            if(err){
+                socket.emit('err',{
+                    msg:err
+                });
+            }else{
+                socket.emit('roomData',{
+                    users:users,
+                    message:messages
+                });
+            }
+        });
+    });
+    socket.on('createMessage',function(message){
+        messages.push(message);
+        io.sockets.emit('messageAdded',message);
+    });
+
+    socket.on('disconnect',function(){
+        Controllers.User.offline(_userId,function(err,user){
+            if(err){
+                socket.emit('err',{
+                    msg:err
+                });
+            }else{
+                socket.broadcast.emit('offline',user);
+            }
+        });
     });
 });
 
