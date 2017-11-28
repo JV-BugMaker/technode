@@ -3,10 +3,11 @@
         <div class="panel-heading room-header">{{room.name}}</div>
         <div class="panel-body room-content">
             <div class="list-group messages" auto-scroll-to-bottom>
-                <div class="list-group-item message" ng-repeat="message in messages">
+                <div class="list-group-item message" ng-repeat="message in room.messages">
                     <img ng-src="{{message.creator.avatarUrl}}" class="img-round" alt="" title="{{message.creator.name}}" />
                     {{message.creator.name}}:{{message.message}}
-                    <time an-time-ago="message.createAt"></time>
+                    <!--动态更新时间am-time-ago-->
+                    <time am-time-ago="message.createAt"></time>
                 </div>
             </div>
             <form action="" class="message-creator" ng-controller="MessageCreatorCtrl">

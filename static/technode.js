@@ -6,6 +6,8 @@
  * $location 组件
  */
 angular.module('technodeApp',['ngRoute']).run(function($window,$rootScope,$http,$location){
+    //引入一个中文包 中文语言包
+    $window.moment.lang('zh-cn');
     $http({
         url:'/api/validate',
         method:'GET',

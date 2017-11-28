@@ -23,7 +23,7 @@ angular.module('technodeApp').controller('RoomCtrl',function($scope,socket){
     socket.on('offline',function(user){
         var _userId = user._id;
         $scope.room.users = $scope.room.users.filter(function(user){
-            return user._id != _userId
+            return user._id != _userId;
         });
     });
 });

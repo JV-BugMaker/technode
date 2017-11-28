@@ -169,25 +169,60 @@ io.sockets.on('connection',function(socket){
             });
         }else{
             socket.broadcast.emit('online',user);
+            //添加系统消息 走消息事件
+            socket.broadcast.emit('messageAdded',{
+                connent:user.name+'进入聊天室',
+                creator:SYSTEM,
+                createAt:Date.now,
+            });
         }
     });
     socket.on('getRoom',function(){
-        Controllers.User.getOnlineUsers(function(err,users){
+        //并行获取db数据
+        async.parallel([
+            function(done){
+                Controllers.User.getOnlineUsers(done);
+            },
+            function(done){
+                Controllers.Message.read(done);
+            }
+        ],function(err,result){
             if(err){
                 socket.emit('err',{
                     msg:err
                 });
             }else{
                 socket.emit('roomData',{
-                    users:users,
-                    message:messages
+                    users:result[0],
+                    messages:result[1],
                 });
             }
         });
+        // Controllers.User.getOnlineUsers(function(err,users){
+        //     if(err){
+        //         socket.emit('err',{
+        //             msg:err
+        //         });
+        //     }else{
+        //         socket.emit('roomData',{
+        //             users:users,
+        //             message:messages
+        //         });
+        //     }
+        // });
     });
     socket.on('createMessage',function(message){
-        messages.push(message);
-        io.sockets.emit('messageAdded',message);
+        // messages.push(message);
+        // io.sockets.emit('messageAdded',message);
+        Controllers.Message.create(function(err,message){
+            if(err){
+                socket.emit('err',{
+                    msg:err
+                });
+            }else{
+                io.sockets.emit('messageAdded',message);
+            }
+        });
     });
 
     socket.on('disconnect',function(){
@@ -198,6 +233,12 @@ io.sockets.on('connection',function(socket){
                 });
             }else{
                 socket.broadcast.emit('offline',user);
+                //添加系统消息 走消息事件 广播消息
+                socket.broadcast.emit('messageAdded',{
+                    connent:user.name+'离开聊天室',
+                    creator:SYSTEM,
+                    createAt:Date.now,
+                });
             }
         });
     });
