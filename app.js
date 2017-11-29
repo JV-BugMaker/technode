@@ -244,3 +244,28 @@ io.sockets.on('connection',function(socket){
     });
 });
 
+// create room logic 
+socket.on('createRoom',function(room){
+    Controllers.Room.create(room,function(err,room){
+        if(err){
+            socket.emit('err',{
+                msg:err
+            });
+        }else{
+            io.sockets.emit('roomAdded',room);
+        }
+    });
+});
+
+//get all rooms list
+socket.on('getAllRooms',function(){
+    Controllers.Room.read(function(err,rooms){
+        if(err){
+            socket.emit('err',{
+                msg:err
+            });
+        }else{
+            io.sockets.emit('roomsData',rooms);
+        }
+    });
+});

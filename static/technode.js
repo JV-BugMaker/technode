@@ -13,7 +13,7 @@ angular.module('technodeApp',['ngRoute']).run(function($window,$rootScope,$http,
         method:'GET',
     }).success(function(user){
         $rootScope.me = user;
-        $location.path('/');
+        $location.path('/rooms');
     }).error(function(datas){
         $location.path('/login');
     });

@@ -11,6 +11,12 @@ angular.module('technodeApp').config(function($routeProvider,$locationProvider){
     }).when('/login',{
         templateUrl:'/pages/login.html',
         controller:'LoginCtrl',  //逻辑尚未开始
+    }).when('/rooms',{
+        templateUrl:'/pages/rooms.html',
+        controller:'RoomsCtrl', 
+    }).when('/rooms/:_roomId',{
+        templateUrl:'/pages/room.html',
+        controller:'RoomCtrl',
     }).otherwise({
         redirectTo:'/login', 
     });
