@@ -3,29 +3,37 @@
         <form action="">
             <div class="form-group">
                 <label for="" class="sr-only">房间号</label>
-                <input type="input" required class="form-control search-room-input" placeholder="搜索房间" />
+                <input type="input" required class="form-control search-room-input" placeholder="搜索房间" 
+                    ng-change="searchRoom()" ng-module="searchKey"
+                />
             </div>
         </form>
     </div>
 </div>
 <div class="row">
     <ul class="room-list clearfix">
-        <li class="room-item">
-            <div class="room-content">
-                <h3>JavaScript<span class="badge pull-right">1人</span></h3>
+        <li class="room-item" ng-repeat="room in rooms">
+            <div class="room-content" ngg-click="enterRoom(room)">
+                <h3>
+                    {{room.name}}
+                    <span class="badge pull-right">
+                        {{room.users.length}}
+                    </span>人
+                </h3>
                 <div class="avatar-list">
-                    <img src="" alt="" class="img-rounded" />
+                    <span ng-repeat="user in room.user" title="{{user.name}}"></span>
+                    <img src="{{user.avatarUrl}}" alt="{{user.email}}" class="img-rounded" />
                 </div>
             </div>
         </li>
     </ul>
 </div>
-<div class="row no-room">
+<div class="row no-room" ng-show="rooms.length == 0 && searchKey">
     <form action="" class="form-inline no-room-form">
         <div class="form-group">   
             没找到你想要的房间
         </div>
-        <strong class="label label-default no-room-label">Java</strong>
-        <button class="btn btn-warning">单击新建</button>
+        <strong class="label label-default no-room-label">{{searchKey}}</strong>
+        <button class="btn btn-warning" ng-click="createRoom()">单击新建</button>
     </form>
 </div>
