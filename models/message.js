@@ -11,6 +11,7 @@ var Message = new Schema({
         name:String,
         avatarUrl:String,
     },
+    _roomId:ObjectId,
     createAt:{
         type:Date,
         default:Date.now,

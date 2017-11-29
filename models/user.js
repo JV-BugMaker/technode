@@ -9,6 +9,7 @@ var User = new Schema({
     email:String,
     name:String,
     avatarUrl:String,
+    _roomId:ObjectId,
     online:Boolean,
 });
 
