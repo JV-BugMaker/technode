@@ -260,7 +260,15 @@ socket.on('createRoom',function(room){
 //get all rooms list
 socket.on('getAllRooms',function(data){
     if(data && data._roomId){
-        Controllers.Room.get
+        Controllers.Room.getById(data._roomId,function(err,room){
+            if(err){
+                socket.emit('err',{
+                    msg:err
+                });
+            }else{
+                socket.emit('roomData.'+data._roomId,room);
+            }
+        });
     }else{
         Controllers.Room.read(function(err,rooms){
             if(err){

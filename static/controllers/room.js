@@ -32,3 +32,5 @@ angular.module('technodeApp').controller('RoomCtrl',function($scope,socket){
     });
 });
 
+
+
