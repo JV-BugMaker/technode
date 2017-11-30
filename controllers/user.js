@@ -57,4 +57,16 @@ exports.getOnlineUsers = function(callback){
     },callback);
 };
 
+//user enter room 
+exports.joinRoom = function(join,callback){
+    db.User.findOneAndUpdate({
+        _id:join.user._id
+    },{
+        $set:{
+            online:true,
+            _roomId:join.room._id
+        }
+    },callback);
+};
+
 

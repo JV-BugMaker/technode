@@ -258,14 +258,42 @@ socket.on('createRoom',function(room){
 });
 
 //get all rooms list
-socket.on('getAllRooms',function(){
-    Controllers.Room.read(function(err,rooms){
+socket.on('getAllRooms',function(data){
+    if(data && data._roomId){
+        Controllers.Room.get
+    }else{
+        Controllers.Room.read(function(err,rooms){
+            if(err){
+                socket.emit('err',{
+                    msg:err
+                });
+            }else{
+                io.sockets.emit('roomsData',rooms);
+            }
+        });
+    }
+    
+});
+
+socket.on('joinRoom',function(join){
+    Controllers.User.joinRoom(join,function(err){
         if(err){
             socket.emit('err',{
                 msg:err
             });
         }else{
-            io.sockets.emit('roomsData',rooms);
+            socket.join(join.room._id);
+            socket.emit('joinRoom.'+join.user._id,join);
+            socket.in(join.room._id).broadcast.emit('messageAdded',{
+                content:join.user.name + '进入房间',
+                creator:SYSTEM,
+                createAt:{
+                    type:Date,
+                    default:Date.now()
+                },
+                _id:ObjectId()
+            });
+            socket.in(join.room._id).broadcast.emit('joinRoom',join);
         }
     });
 });

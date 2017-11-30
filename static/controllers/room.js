@@ -26,5 +26,9 @@ angular.module('technodeApp').controller('RoomCtrl',function($scope,socket){
             return user._id != _userId;
         });
     });
+
+    socket.on('joinRoom',function(join){
+        $scope.room.users.push(join.user);
+    });
 });
 

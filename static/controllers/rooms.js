@@ -1,4 +1,4 @@
-angular.module('technodeApp').controller('RoomsCtrl',function($scope){
+angular.module('technodeApp').controller('RoomsCtrl',function($scope,$location,socket){
     //rooms fe logic
     socket.emit('getAllRooms');
     socket.on('roomsData',function(rooms){
@@ -21,5 +21,21 @@ angular.module('technodeApp').controller('RoomsCtrl',function($scope){
     socket.on('roomAdded',function(room){
         $scope._rooms.push(room);
         $scope.searchRoom();
+    });
+    $scope.enterRoom = function(room){
+        socket.emit('joinRoom',{
+            user:$scope.me,
+            room:room
+        });
+    };
+    socket.once('joinRoom.'+$scope.me._id,function(join){
+        $location.path('/rooms/' + join.room._id);
+    });
+    socket.on('joinRoom',function(join){
+        $scope.rooms.forEach(function(room){
+            if(room._id == join.room._id){
+                room.users.push(join.user);
+            }
+        });
     });
 });
