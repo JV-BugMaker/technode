@@ -220,6 +220,8 @@ io.sockets.on('connection',function(socket){
                     msg:err
                 });
             }else{
+                //消息在房间内传递
+                socket.in(message._roomId).broadcast.emit('messageAdded',message);
                 io.sockets.emit('messageAdded',message);
             }
         });
@@ -232,13 +234,30 @@ io.sockets.on('connection',function(socket){
                     msg:err
                 });
             }else{
-                socket.broadcast.emit('offline',user);
-                //添加系统消息 走消息事件 广播消息
-                socket.broadcast.emit('messageAdded',{
-                    connent:user.name+'离开聊天室',
-                    creator:SYSTEM,
-                    createAt:Date.now,
-                });
+                if(user._roomId){
+                    //广播用户离开房间事件
+                    socket.in(user._roomId).broadcast.emit('leaveRoom',user);
+                    socket.in(user._roomId).broadcast.emit('messageAdded',{
+                        content:user.name+'离开聊天室',
+                        creator:SYSTEM,
+                        createAt:{
+                            type:Date,
+                            default:Date.now(),
+                            _id:ObjectId
+                        }
+                    });
+                }
+                //调用控制器中的leaveroom 函数
+                Controllers.User.leaveRoom({
+                    user:user,
+                },function(){});
+                // socket.broadcast.emit('offline',user);
+                // //添加系统消息 走消息事件 广播消息
+                // socket.broadcast.emit('messageAdded',{
+                //     connent:user.name+'离开聊天室',
+                //     creator:SYSTEM,
+                //     createAt:Date.now,
+                // });
             }
         });
     });
@@ -302,6 +321,27 @@ socket.on('joinRoom',function(join){
                 _id:ObjectId()
             });
             socket.in(join.room._id).broadcast.emit('joinRoom',join);
+        }
+    });
+});
+
+
+// user leave room
+socket.on('leaveRoom',function(leave){
+    Controllers.User.leaveRoom(leave,function(err){
+        if(err){
+            socket.emit('err',{
+                msg:err
+            });
+        }else{
+            socket.in(leave.room._id).broadcast.emit('messageAdded',{
+                content:leave.user.name + '离开聊天室',
+                creator:SYSTEM,
+                createAt:new Date(),
+                _id:ObjectId
+            });
+            socket.leave(leave._roomId);
+            io.sockets.emit('leaveRoom',leave);
         }
     });
 });
